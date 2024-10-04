@@ -27,6 +27,7 @@ __all__ = [
     "TipableVMobject",
     "Arc",
     "ArcBetweenPoints",
+    "ArcToSelf",
     "CurvedArrow",
     "CurvedDoubleArrow",
     "Circle",
@@ -439,7 +440,7 @@ class ArcBetweenPoints(Arc):
         start: Point3D,
         end: Point3D,
         angle: float = TAU / 4,
-        radius: float = None,
+        radius: float = 3,
         **kwargs,
     ) -> None:
         if radius is not None:
@@ -470,6 +471,33 @@ class ArcBetweenPoints(Arc):
             else:
                 self.radius = np.inf
 
+class ArcToSelf(Arc):
+    """Inherits from Arc and additionally takes 2 points between which the arc is spanned.
+
+    Example
+    -------
+    
+    """
+
+    def __init__(
+        self,
+        start: Point3D,
+        end: Point3D,
+        radius: float = 1,
+        direction = RIGHT,
+        **kwargs,
+    ) -> None:
+        _arc_center = start + radius*direction
+        super().__init__(
+            radius=radius,
+            start_angle=0,
+            angle=TAU,
+            arc_center = _arc_center,
+            **kwargs,
+        )
+        
+
+        
 
 class CurvedArrow(ArcBetweenPoints):
     def __init__(self, start_point: Point3D, end_point: Point3D, **kwargs) -> None:
